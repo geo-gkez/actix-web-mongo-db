@@ -2,7 +2,7 @@ POST http://localhost:8080/members
 Content-Type: application/json
 
 {
-  "name": "John2",
-  "surname": "Doe2",
-  "email": "som2a@gmail"
+  "name": "Jod32",
+  "surname": "3dfe2",
+  "email": "sod5sa@gmail"
 }

@@ -1,15 +1,10 @@
 mod models;
-mod services;
 mod routes;
+mod services;
 
-use actix_web::{get, web::Data, App, HttpResponse, HttpServer, Responder};
+use crate::routes::members_route::init_members_route;
+use actix_web::{web::Data, App, HttpServer};
 use services::db::Database;
-use crate::routes::members_route::create_member;
-
-#[get("/")]
-async fn hello() -> impl Responder {
-    HttpResponse::Ok().body("Hello, world!")
-}
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
@@ -19,11 +14,9 @@ async fn main() -> std::io::Result<()> {
     HttpServer::new(move || {
         App::new()
             .app_data(db_data.clone())
-            .service(hello)
-            .service(create_member)
-    }
-    )
-        .bind(("localhost", 8080))?
-        .run()
-        .await
+            .configure(init_members_route)
+    })
+    .bind(("localhost", 8080))?
+    .run()
+    .await
 }

@@ -1,6 +1,7 @@
-use mongodb::{bson::extjson::de::Error, results::InsertOneResult, Client, Collection, IndexModel};
+use mongodb::{results::InsertOneResult, Client, Collection, IndexModel};
 use mongodb::bson::doc;
 use mongodb::options::IndexOptions;
+use mongodb::error::Error;
 use crate::models::members_model::Members;
 
 pub struct Database {
@@ -12,8 +13,7 @@ const DB_NAME: &str = "members_db";
 const MEMBERS_COLLECTION: &str = "members";
 impl Database {
     pub async fn init() -> Self {
-        let uri =
-            std::env::var("MONGODB_URI").unwrap_or_else(|_| DEFAULT_MONGODB_URI.into());
+        let uri = std::env::var("MONGODB_URI").unwrap_or_else(|_| DEFAULT_MONGODB_URI.into());
 
         let client = Client::with_uri_str(&uri).await.expect("failed to connect");
         let db = client.database(DB_NAME);
@@ -36,13 +36,11 @@ impl Database {
     }
 
     pub async fn create_member(&self, member: Members) -> Result<InsertOneResult, Error> {
-        let result = self
-            .members
-            .insert_one(member)
-            .await
-            .ok()
-            .expect("Failed to insert member");
+        let result = self.members.insert_one(member).await;
 
-        Ok(result)
+        match result {
+            Ok(result) => Ok(result),
+            Err(e) =>  Err(e),
+        }
     }
 }
