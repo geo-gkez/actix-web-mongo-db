@@ -3,8 +3,8 @@ use crate::services::db::Database;
 use actix_web::web::{Data, Json};
 use actix_web::{get, post, web, HttpResponse, Responder};
 
-pub fn init_members_route(cfg: &mut web::ServiceConfig) {
-    cfg.service(web::scope("/members").service(create_member).service(hello));
+pub fn init_members_route(config: &mut web::ServiceConfig) {
+    config.service(web::scope("/members").service(create_member).service(hello));
 }
 #[get("")]
 pub async fn hello() -> impl Responder {
