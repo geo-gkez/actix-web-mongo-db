@@ -6,3 +6,9 @@ Content-Type: application/json
   "surname": "3dfe2",
   "email": "sod5sa@gmail"
 }
+
+###
+GET http://localhost:8080/members
+
+###
+GET http://localhost:8080/members/sod5sa@gmail

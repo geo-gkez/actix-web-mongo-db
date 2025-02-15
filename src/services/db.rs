@@ -1,8 +1,9 @@
-use mongodb::{results::InsertOneResult, Client, Collection, IndexModel};
-use mongodb::bson::doc;
-use mongodb::options::IndexOptions;
-use mongodb::error::Error;
 use crate::models::members_model::Members;
+use futures_util::TryStreamExt;
+use mongodb::bson::doc;
+use mongodb::error::Error;
+use mongodb::options::IndexOptions;
+use mongodb::{results::InsertOneResult, Client, Collection, IndexModel};
 
 pub struct Database {
     members: Collection<Members>,
@@ -40,7 +41,27 @@ impl Database {
 
         match result {
             Ok(result) => Ok(result),
-            Err(e) =>  Err(e),
+            Err(e) => Err(e),
+        }
+    }
+
+    pub async fn get_members(&self) -> Result<Vec<Members>, Error> {
+        let mut cursor = self.members.find(doc! {}).await?;
+        let mut members = Vec::new();
+
+        while let Some(member) = cursor.try_next().await? {
+            members.push(member);
+        }
+
+        Ok(members)
+    }
+
+    pub async fn get_member_by_email(&self, email: String) -> Result<Option<Members>, Error> {
+        let member = self.members.find_one(doc! { "email": email }).await?;
+
+        match member {
+            Some(member) => Ok(Some(member)),
+            None => Ok(None),
         }
     }
 }

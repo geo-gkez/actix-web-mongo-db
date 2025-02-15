@@ -16,7 +16,10 @@ async fn main() -> std::io::Result<()> {
             .app_data(db_data.clone())
             .configure(init_members_route)
     })
-    .bind(("localhost", 8080))?
+    .bind(("localhost", 8080))
+    .map_err(|e| e.to_string())
+    .expect("Can not bind to port 8080")
     .run()
     .await
+    .map_err(|e| e.into())
 }
