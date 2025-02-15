@@ -12,28 +12,31 @@ This project demonstrates basic implementations of the Actix Web with MongoDB.
 
 1. Clone the repository
 
-```bash
-  git clone https://github.com/geo-gkez/actix-web-mongo-db.git
-  cd actix-web-mongo-db
-```
+    ```bash
+      git clone https://github.com/geo-gkez/actix-web-mongo-db.git
+      cd actix-web-mongo-db
+    ```
 
 2. Install dependencies
 
-```bash
-  cargo build
-```
+     ```bash
+       cargo build
+     ```
 
 ## Running the server
 
 1. Start the MongoDB server [you can use the docker-compose](docker-compose.yml)
-   - if you are using docker-compose, run the following command:
+   if you are using docker-compose, run the following command:
      ```bash
       docker-compose up -d`
      ```
 2. Run the server
-
-  ```bash
-   cargo run
-  ```
-
+     ```bash
+      cargo run
+    ```
+    - If you want to hot reload you can use:
+         ```bash
+         cargo install cargo-watch
+         cargo watch -c -w src -x run
+         ```
 3. The server will be running on `http://localhost:8080`
